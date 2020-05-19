@@ -185,7 +185,7 @@ static void test_fill_u32(void) {
     uint32_t expected_a[17] = {
         0xade0b876, 0x903df1a0, 0xe56a5d40, 0x28bd8653, 0xb819d2bd, 0x1aed8da0, 0xccef36a8,
         0xc70d778b, 0x7c5941da, 0x8d485751, 0x3fe02477, 0x374ad8b8, 0xf4b8436a, 0x1ca11815,
-        0x69b687c3, 0x8665eeb2, 0xbee7079f,
+        0x69b687c3, 0x8665eeb2, 0xbee7079f
     };
 
     uint32_t expected_b[3] = { 0x7a385155, 0x7c97ba98, 0x0d082d73 };
@@ -248,6 +248,94 @@ static void test_fill_u64(void) {
     }
 }
 
+static void test_next_f32(void) {
+    ChaChaRng rng;
+    chacha20_rng_init_zero(&rng, 0);
+
+    float expected[32] = {
+        0.679210186f, 0.563445151f, 0.896154225f, 0.159141898f, 0.719143987f, 0.105187237f,
+        0.800525069f, 0.777549207f, 0.485736907f, 0.551885068f, 0.249513865f, 0.215985775f,
+        0.955936611f, 0.111833096f, 0.412941396f, 0.524992824f, 0.745712698f, 0.477421820f,
+        0.486690164f, 0.050906003f, 0.625626504f, 0.411710918f, 0.243465781f, 0.927657008f,
+        0.461451948f, 0.262922645f, 0.688284934f, 0.832913876f, 0.156737149f, 0.273361802f,
+        0.121259749f, 0.434775889f
+    };
+
+    for (size_t i = 0; i < 32; i++) {
+        assert(chacha_rng_next_f32(&rng) == expected[i]);
+    }
+}
+
+static void test_fill_f32(void) {
+    ChaChaRng rng;
+    chacha20_rng_init_zero(&rng, 0);
+
+    float expected_a[17] = {
+        0.679210186f, 0.563445151f, 0.896154225f, 0.159141898f, 0.719143987f, 0.105187237f,
+        0.800525069f, 0.777549207f, 0.485736907f, 0.551885068f, 0.249513865f, 0.215985775f,
+        0.955936611f, 0.111833096f, 0.412941396f, 0.524992824f, 0.745712698f
+    };
+
+    float expected_b[3] = { 0.477421820f, 0.486690164f, 0.050906003f };
+
+    float a[17] = { 0 };
+    float b[3] = { 0 };
+
+    chacha_rng_fill_f32(&rng, a, 17);
+    chacha_rng_fill_f32(&rng, b, 3);
+
+    for (size_t i = 0; i < 17; i++) {
+        assert(a[i] == expected_a[i]);
+    }
+
+    for (size_t i = 0; i < 3; i++) {
+        assert(b[i] == expected_b[i]);
+    }
+}
+
+static void test_next_f64(void) {
+    ChaChaRng rng;
+    chacha20_rng_init_zero(&rng, 0);
+
+    double expected[16] = {
+        0.56344518826324730, 0.15914191768880792, 0.10518727468306754, 0.77754923976038692,
+        0.55188508738897202, 0.21598581789282933, 0.11183310066255192, 0.52499286514076893,
+        0.47742184012795619, 0.05090602941035527, 0.41171093485914778, 0.92765701986929994,
+        0.26292268104419381, 0.83291390274844246, 0.27336182099691053, 0.43477590641036157
+    };
+
+    for (size_t i = 0; i < 16; i++) {
+        assert(chacha_rng_next_f64(&rng) == expected[i]);
+    }
+}
+
+static void test_fill_f64(void) {
+    ChaChaRng rng;
+    chacha20_rng_init_zero(&rng, 0);
+
+    double expected_a[9] = {
+        0.56344518826324730, 0.15914191768880792, 0.10518727468306754, 0.77754923976038692,
+        0.55188508738897202, 0.21598581789282933, 0.11183310066255192, 0.52499286514076893,
+        0.47742184012795619
+    };
+
+    double expected_b[2] = { 0.05090602941035527, 0.41171093485914778 };
+
+    double a[9] = { 0 };
+    double b[2] = { 0 };
+
+    chacha_rng_fill_f64(&rng, a, 9);
+    chacha_rng_fill_f64(&rng, b, 2);
+
+    for (size_t i = 0; i < 9; i++) {
+        assert(a[i] == expected_a[i]);
+    }
+
+    for (size_t i = 0; i < 2; i++) {
+        assert(b[i] == expected_b[i]);
+    }
+}
+
 static void test_stream(void) {
     ChaChaRng rng;
     chacha20_rng_init_zero(&rng, 0xb61e6e6a48c285);
@@ -281,6 +369,12 @@ int main(void) {
 
     test_next_u64();
     test_fill_u64();
+
+    test_next_f32();
+    test_fill_f32();
+
+    test_next_f64();
+    test_fill_f64();
 
     test_stream();
 }
