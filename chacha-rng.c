@@ -164,6 +164,26 @@ void chacha_rng_fill_u64(ChaChaRng *rng, uint64_t *array, size_t count) {
     }
 }
 
+float chacha_rng_next_f32(ChaChaRng *rng) {
+    return (chacha_rng_next_u32(rng) >> 8) * 0x1p-24f;
+}
+
+void chacha_rng_fill_f32(ChaChaRng *rng, float *array, size_t count) {
+    for (size_t i = 0; i < count; i++) {
+        array[i] = chacha_rng_next_f32(rng);
+    }
+}
+
+double chacha_rng_next_f64(ChaChaRng *rng) {
+    return (chacha_rng_next_u64(rng) >> 11) * 0x1p-53;
+}
+
+void chacha_rng_fill_f64(ChaChaRng *rng, double *array, size_t count) {
+    for (size_t i = 0; i < count; i++) {
+        array[i] = chacha_rng_next_f64(rng);
+    }
+}
+
 static inline uint32_t rotated_left(uint32_t value, uint32_t count) {
     return (value << count) | (value >> (32 - count));
 }

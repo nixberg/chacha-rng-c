@@ -30,6 +30,10 @@ uint32_t chacha_rng_next_u32(ChaChaRng *rng);
 
 uint64_t chacha_rng_next_u64(ChaChaRng *rng);
 
+float chacha_rng_next_f32(ChaChaRng *rng);
+
+double chacha_rng_next_f64(ChaChaRng *rng);
+
 void chacha_rng_fill_u8(ChaChaRng *rng, uint8_t *array, size_t count);
 
 void chacha_rng_fill_u16(ChaChaRng *rng, uint16_t *array, size_t count);
@@ -37,5 +41,9 @@ void chacha_rng_fill_u16(ChaChaRng *rng, uint16_t *array, size_t count);
 void chacha_rng_fill_u32(ChaChaRng *rng, uint32_t *array, size_t count);
 
 void chacha_rng_fill_u64(ChaChaRng *rng, uint64_t *array, size_t count);
+
+void chacha_rng_fill_f32(ChaChaRng *rng, float *array, size_t count);
+
+void chacha_rng_fill_f64(ChaChaRng *rng, double *array, size_t count);
 
 #endif /* chacha_rng_h */
