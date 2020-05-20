@@ -105,7 +105,9 @@ static inline void increment_counter(ChaChaRng *rng) {
     rng->state[12]++;
     if (rng->state[12] == 0) {
         rng->state[13]++;
-        assert(rng->state[13] != 0);
+        if (rng->state[13] == 0) {
+            exit(EXIT_FAILURE);
+        }
     }
 }
 
