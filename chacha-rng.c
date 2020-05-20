@@ -3,34 +3,20 @@
 
 #include "chacha-rng.h"
 
-static inline uint32_t u32_to_le(uint32_t value) {
-    return value;
-}
-
-static inline uint32_t u32_from_le(uint32_t value) {
-    return value;
-}
-
-static inline uint64_t u64_to_le(uint64_t value) {
-    return value;
-}
-
 static void chacha_rng_init(ChaChaRng *rng, size_t rounds, const uint32_t seed[8], uint64_t stream) {
-    stream = u64_to_le(stream);
+    rng->state[ 0] = 0x61707865;
+    rng->state[ 1] = 0x3320646e;
+    rng->state[ 2] = 0x79622d32;
+    rng->state[ 3] = 0x6b206574;
 
-    rng->state[ 0] = u32_to_le(0x61707865);
-    rng->state[ 1] = u32_to_le(0x3320646e);
-    rng->state[ 2] = u32_to_le(0x79622d32);
-    rng->state[ 3] = u32_to_le(0x6b206574);
-
-    rng->state[ 4] = u32_to_le(seed[0]);
-    rng->state[ 5] = u32_to_le(seed[1]);
-    rng->state[ 6] = u32_to_le(seed[2]);
-    rng->state[ 7] = u32_to_le(seed[3]);
-    rng->state[ 8] = u32_to_le(seed[4]);
-    rng->state[ 9] = u32_to_le(seed[5]);
-    rng->state[10] = u32_to_le(seed[6]);
-    rng->state[11] = u32_to_le(seed[7]);
+    rng->state[ 4] = seed[0];
+    rng->state[ 5] = seed[1];
+    rng->state[ 6] = seed[2];
+    rng->state[ 7] = seed[3];
+    rng->state[ 8] = seed[4];
+    rng->state[ 9] = seed[5];
+    rng->state[10] = seed[6];
+    rng->state[11] = seed[7];
 
     rng->state[12] = 0;
     rng->state[13] = 0;
@@ -115,9 +101,9 @@ void chacha_rng_fill_u16(ChaChaRng *rng, uint16_t *array, size_t count) {
 static void double_round(uint32_t state[16]);
 
 static inline void increment_counter(ChaChaRng *rng) {
-    rng->state[12] = u32_to_le(u32_from_le(rng->state[12]) + 1);
+    rng->state[12]++;
     if (rng->state[12] == 0) {
-        rng->state[13] = u32_to_le(u32_from_le(rng->state[13]) + 1);
+        rng->state[13]++;
         assert(rng->state[13] != 0);
     }
 }
@@ -143,7 +129,7 @@ uint32_t chacha_rng_next_u32(ChaChaRng *rng) {
 
     rng->index += 1;
 
-    return u32_from_le(result);
+    return result;
 }
 
 void chacha_rng_fill_u32(ChaChaRng *rng, uint32_t *array, size_t count) {

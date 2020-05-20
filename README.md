@@ -3,8 +3,6 @@
 [ChaCha](https://cr.yp.to/chacha/chacha-20080128.pdf)-based RNG for C.
 [Compatible](https://github.com/nixberg/chacha-rng-compability-rs) with Rust’s [rand_chacha](https://crates.io/crates/rand_chacha).
 
-Does not support big-endian platforms.
-
 # Usage
 
 ```C
