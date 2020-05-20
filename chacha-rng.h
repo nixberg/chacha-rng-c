@@ -7,7 +7,7 @@ typedef struct {
     uint32_t state[16];
     uint32_t working_state[16];
     size_t rounds;
-    size_t index;
+    size_t word_index;
 } ChaChaRng;
 
 void chacha8_rng_init(ChaChaRng *rng, const uint32_t seed[8], uint64_t stream);

@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "chacha-rng.h"
 
@@ -25,7 +26,7 @@ static void chacha_rng_init(ChaChaRng *rng, size_t rounds, const uint32_t seed[8
 
     rng->rounds = rounds;
 
-    rng->index = 0;
+    rng->word_index = 16;
 }
 
 void chacha8_rng_init(ChaChaRng *rng, const uint32_t seed[8], uint64_t stream) {
@@ -109,7 +110,9 @@ static inline void increment_counter(ChaChaRng *rng) {
 }
 
 uint32_t chacha_rng_next_u32(ChaChaRng *rng) {
-    if (rng->index % 16 == 0) {
+    assert(0 <= rng->word_index && rng->word_index <= 16);
+
+    if (rng->word_index == 16) {
         for (size_t i = 0; i < 16; i++) {
             rng->working_state[i] = rng->state[i];
         }
@@ -123,11 +126,12 @@ uint32_t chacha_rng_next_u32(ChaChaRng *rng) {
         }
 
         increment_counter(rng);
+        rng->word_index = 0;
     }
 
-    uint32_t result = rng->working_state[rng->index % 16];
+    uint32_t result = rng->working_state[rng->word_index];
 
-    rng->index += 1;
+    rng->word_index++;
 
     return result;
 }
