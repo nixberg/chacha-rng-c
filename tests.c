@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "chacha-rng.h"
+#include "chacha.h"
 
 static void test_chacha8(void) {
-    ChaChaRng rng;
-    chacha8_rng_init_zero(&rng, 0);
+    ChaCha rng;
+    chacha8_zero(&rng, 0);
 
     for (size_t i = 0; i < 3141; i++) {
-        chacha_rng_next_u64(&rng);
+        chacha_u64(&rng);
     }
 
     uint64_t expected[8] = {
@@ -19,13 +19,13 @@ static void test_chacha8(void) {
     };
 
     for (size_t i = 0; i < 8; i++) {
-        assert(chacha_rng_next_u64(&rng) == expected[i]);
+        assert(chacha_u64(&rng) == expected[i]);
     }
 }
 
-static void test_next_u8(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+static void test_u8(void) {
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     uint8_t expected[128] = {
         0x76, 0xa0, 0x40, 0x53, 0xbd, 0xa0, 0xa8, 0x8b, 0xda, 0x51, 0x77, 0xb8, 0x6a, 0x15,
@@ -41,13 +41,13 @@ static void test_next_u8(void) {
     };
 
     for (size_t i = 0; i < 128; i++) {
-        assert(chacha_rng_next_u8(&rng) == expected[i]);
+        assert(chacha_u8(&rng) == expected[i]);
     }
 }
 
 void test_fill_u8(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     uint8_t expected_a[65] = {
         0x76, 0xb8, 0xe0, 0xad, 0xa0, 0xf1, 0x3d, 0x90, 0x40, 0x5d, 0x6a, 0xe5, 0x53, 0x86,
@@ -62,8 +62,8 @@ void test_fill_u8(void) {
     uint8_t a[65] = { 0 };
     uint8_t b[9] = { 0 };
 
-    chacha_rng_fill_u8(&rng, a, 65);
-    chacha_rng_fill_u8(&rng, b, 9);
+    chacha_fill_u8(&rng, a, 65);
+    chacha_fill_u8(&rng, b, 9);
 
     for (size_t i = 0; i < 65; i++) {
         assert(a[i] == expected_a[i]);
@@ -84,11 +84,11 @@ void test_fill_u8_logic(void) {
     };
 
     for (size_t count = 0; count < 65; count++) {
-        ChaChaRng rng;
-        chacha20_rng_init_zero(&rng, 0);
+        ChaCha rng;
+        chacha20_zero(&rng, 0);
 
         uint8_t array[65] = { 0 };
-        chacha_rng_fill_u8(&rng, array, count);
+        chacha_fill_u8(&rng, array, count);
 
         for (size_t i = 0; i < count; i++) {
             assert(array[i] == expected[i]);
@@ -96,9 +96,9 @@ void test_fill_u8_logic(void) {
     }
 }
 
-static void test_next_u16(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+static void test_u16(void) {
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     uint16_t expected[64] = {
         0xb876, 0xf1a0, 0x5d40, 0x8653, 0xd2bd, 0x8da0, 0x36a8, 0x778b, 0x41da, 0x5751, 0x2477,
@@ -110,13 +110,13 @@ static void test_next_u16(void) {
     };
 
     for (size_t i = 0; i < 64; i++) {
-        assert(chacha_rng_next_u16(&rng) == expected[i]);
+        assert(chacha_u16(&rng) == expected[i]);
     }
 }
 
 void test_fill_u16(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     uint16_t expected_a[33] = {
         0xb876, 0xade0, 0xf1a0, 0x903d, 0x5d40, 0xe56a, 0x8653, 0x28bd, 0xd2bd, 0xb819, 0x8da0,
@@ -129,8 +129,8 @@ void test_fill_u16(void) {
     uint16_t a[33] = { 0 };
     uint16_t b[5] = { 0 };
 
-    chacha_rng_fill_u16(&rng, a, 33);
-    chacha_rng_fill_u16(&rng, b, 5);
+    chacha_fill_u16(&rng, a, 33);
+    chacha_fill_u16(&rng, b, 5);
 
     for (size_t i = 0; i < 33; i++) {
         assert(a[i] == expected_a[i]);
@@ -149,11 +149,11 @@ void test_fill_u16_logic(void) {
     };
 
     for (size_t count = 0; count < 33; count++) {
-        ChaChaRng rng;
-        chacha20_rng_init_zero(&rng, 0);
+        ChaCha rng;
+        chacha20_zero(&rng, 0);
 
         uint16_t array[33] = { 0 };
-        chacha_rng_fill_u16(&rng, array, count);
+        chacha_fill_u16(&rng, array, count);
 
         for (size_t i = 0; i < count; i++) {
             assert(array[i] == expected[i]);
@@ -161,9 +161,9 @@ void test_fill_u16_logic(void) {
     }
 }
 
-static void test_next_u32(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+static void test_u32(void) {
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     uint32_t expected[32] = {
         0xade0b876, 0x903df1a0, 0xe56a5d40, 0x28bd8653, 0xb819d2bd, 0x1aed8da0, 0xccef36a8,
@@ -174,13 +174,13 @@ static void test_next_u32(void) {
     };
 
     for (size_t i = 0; i < 32; i++) {
-        assert(chacha_rng_next_u32(&rng) == expected[i]);
+        assert(chacha_u32(&rng) == expected[i]);
     }
 }
 
 static void test_fill_u32(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     uint32_t expected_a[17] = {
         0xade0b876, 0x903df1a0, 0xe56a5d40, 0x28bd8653, 0xb819d2bd, 0x1aed8da0, 0xccef36a8,
@@ -193,8 +193,8 @@ static void test_fill_u32(void) {
     uint32_t a[17] = { 0 };
     uint32_t b[3] = { 0 };
 
-    chacha_rng_fill_u32(&rng, a, 17);
-    chacha_rng_fill_u32(&rng, b, 3);
+    chacha_fill_u32(&rng, a, 17);
+    chacha_fill_u32(&rng, b, 3);
 
     for (size_t i = 0; i < 17; i++) {
         assert(a[i] == expected_a[i]);
@@ -205,9 +205,9 @@ static void test_fill_u32(void) {
     }
 }
 
-static void test_next_u64(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+static void test_u64(void) {
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     uint64_t expected[16] = {
         0x903df1a0ade0b876, 0x28bd8653e56a5d40, 0x1aed8da0b819d2bd, 0xc70d778bccef36a8,
@@ -217,13 +217,13 @@ static void test_next_u64(void) {
     };
 
     for (size_t i = 0; i < 16; i++) {
-        assert(chacha_rng_next_u64(&rng) == expected[i]);
+        assert(chacha_u64(&rng) == expected[i]);
     }
 }
 
 static void test_fill_u64(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     uint64_t expected_a[9] = {
         0x903df1a0ade0b876, 0x28bd8653e56a5d40, 0x1aed8da0b819d2bd, 0xc70d778bccef36a8,
@@ -236,8 +236,8 @@ static void test_fill_u64(void) {
     uint64_t a[9] = { 0 };
     uint64_t b[2] = { 0 };
 
-    chacha_rng_fill_u64(&rng, a, 9);
-    chacha_rng_fill_u64(&rng, b, 2);
+    chacha_fill_u64(&rng, a, 9);
+    chacha_fill_u64(&rng, b, 2);
 
     for (size_t i = 0; i < 9; i++) {
         assert(a[i] == expected_a[i]);
@@ -248,9 +248,9 @@ static void test_fill_u64(void) {
     }
 }
 
-static void test_next_f32(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+static void test_f32(void) {
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     float expected[32] = {
         0.679210186f, 0.563445151f, 0.896154225f, 0.159141898f, 0.719143987f, 0.105187237f,
@@ -262,13 +262,13 @@ static void test_next_f32(void) {
     };
 
     for (size_t i = 0; i < 32; i++) {
-        assert(chacha_rng_next_f32(&rng) == expected[i]);
+        assert(chacha_f32(&rng) == expected[i]);
     }
 }
 
 static void test_fill_f32(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     float expected_a[17] = {
         0.679210186f, 0.563445151f, 0.896154225f, 0.159141898f, 0.719143987f, 0.105187237f,
@@ -281,8 +281,8 @@ static void test_fill_f32(void) {
     float a[17] = { 0 };
     float b[3] = { 0 };
 
-    chacha_rng_fill_f32(&rng, a, 17);
-    chacha_rng_fill_f32(&rng, b, 3);
+    chacha_fill_f32(&rng, a, 17);
+    chacha_fill_f32(&rng, b, 3);
 
     for (size_t i = 0; i < 17; i++) {
         assert(a[i] == expected_a[i]);
@@ -293,9 +293,9 @@ static void test_fill_f32(void) {
     }
 }
 
-static void test_next_f64(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+static void test_f64(void) {
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     double expected[16] = {
         0.56344518826324730, 0.15914191768880792, 0.10518727468306754, 0.77754923976038692,
@@ -305,13 +305,13 @@ static void test_next_f64(void) {
     };
 
     for (size_t i = 0; i < 16; i++) {
-        assert(chacha_rng_next_f64(&rng) == expected[i]);
+        assert(chacha_f64(&rng) == expected[i]);
     }
 }
 
 static void test_fill_f64(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0);
+    ChaCha rng;
+    chacha20_zero(&rng, 0);
 
     double expected_a[9] = {
         0.56344518826324730, 0.15914191768880792, 0.10518727468306754, 0.77754923976038692,
@@ -324,8 +324,8 @@ static void test_fill_f64(void) {
     double a[9] = { 0 };
     double b[2] = { 0 };
 
-    chacha_rng_fill_f64(&rng, a, 9);
-    chacha_rng_fill_f64(&rng, b, 2);
+    chacha_fill_f64(&rng, a, 9);
+    chacha_fill_f64(&rng, b, 2);
 
     for (size_t i = 0; i < 9; i++) {
         assert(a[i] == expected_a[i]);
@@ -337,8 +337,8 @@ static void test_fill_f64(void) {
 }
 
 static void test_stream(void) {
-    ChaChaRng rng;
-    chacha20_rng_init_zero(&rng, 0xb61e6e6a48c285);
+    ChaCha rng;
+    chacha20_zero(&rng, 0xb61e6e6a48c285);
 
     uint32_t expected[32] = {
         0x3fa865f8, 0xcc53c4a6, 0xe1a9bb4a, 0x321a1962, 0xfa0d984f, 0x1073a4d4, 0xbcc96d46,
@@ -349,31 +349,31 @@ static void test_stream(void) {
     };
 
     for (size_t i = 0; i < 16; i++) {
-        assert(chacha_rng_next_u32(&rng) == expected[i]);
+        assert(chacha_u32(&rng) == expected[i]);
     }
 }
 
 int main(void) {
     test_chacha8();
 
-    test_next_u8();
+    test_u8();
     test_fill_u8();
     test_fill_u8_logic();
 
-    test_next_u16();
+    test_u16();
     test_fill_u16();
     test_fill_u16_logic();
 
-    test_next_u32();
+    test_u32();
     test_fill_u32();
 
-    test_next_u64();
+    test_u64();
     test_fill_u64();
 
-    test_next_f32();
+    test_f32();
     test_fill_f32();
 
-    test_next_f64();
+    test_f64();
     test_fill_f64();
 
     test_stream();
